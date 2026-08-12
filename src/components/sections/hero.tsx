@@ -12,8 +12,14 @@ import { formatDecimal } from '@/lib/utils/format'
 const HERO_IMAGE = '/images/hero-mercedes-cls.jpg'
 
 /**
- * Full-viewport opener. The photograph is the only `priority` image on the page —
- * it is the LCP element.
+ * Full-viewport opener. The photograph is the LCP element, and the only image on the
+ * page loaded eagerly.
+ *
+ * `loading="eager"` + `fetchPriority="high"` rather than `preload`: the `<img>` is the
+ * first thing in `<main>`, so the parser finds it immediately and a preload link in the
+ * `<head>` would only duplicate a discovery that is not late. What the browser actually
+ * needs is the priority signal — and Next 16 deprecated `priority` in favour of these
+ * explicit props (node_modules/next/dist/docs → components/image.md).
  *
  * Type sits high, the meta strip sits low, and the car is pushed right and down via
  * `object-position` so the two stop competing for the same area.
@@ -27,7 +33,8 @@ export async function Hero() {
         src={HERO_IMAGE}
         alt={dict.hero.imageAlt}
         fill
-        priority
+        loading="eager"
+        fetchPriority="high"
         sizes="100vw"
         {...blurProps(HERO_IMAGE)}
         className="-z-20 object-cover object-[38%_64%]"
