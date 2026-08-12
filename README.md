@@ -94,19 +94,23 @@ wtedy, gdy `beforeImage` i `afterImage` wskazują ten sam plik. Podmiana na inn�
 
 Vercel, plan Hobby. Push do `main` → deploy produkcyjny, pull request → deploy preview.
 
-| Zmienna                   | Wymagana | Po co                                |
-| ------------------------- | -------- | ------------------------------------ |
-| `NEXT_PUBLIC_SITE_URL`    | tak      | `metadataBase`, sitemap, Open Graph  |
-| `LEAD_NOTIFICATION_EMAIL` | nie      | adres odbiorcy zgłoszeń z formularza |
-| `RESEND_API_KEY`          | nie      | dostawca e-mail                      |
+| Zmienna                   | Wymagana           | Po co                                            |
+| ------------------------- | ------------------ | ------------------------------------------------ |
+| `NEXT_PUBLIC_SITE_URL`    | tak (build padnie) | `metadataBase`, canonical, hreflang, sitemap, OG |
+| `LEAD_NOTIFICATION_EMAIL` | nie                | adres odbiorcy zgłoszeń z formularza             |
+| `RESEND_API_KEY`          | nie                | dostawca e-mail                                  |
 
-Bez `NEXT_PUBLIC_SITE_URL` metadane wskazują na `localhost:3000`, więc podlinkowanie strony
-daje zły preview. Bez dwóch pozostałych formularz działa i loguje zgłoszenia po stronie
-serwera — patrz [ADR-0002](.agents/decisions/0002-lead-delivery.md).
+`NEXT_PUBLIC_SITE_URL` musi być absolutnym adresem `https://`. Build produkcyjny bez niego
+**przerywa pracę z błędem** — oba locale są prerenderowane, więc origin trafia do canonicala
+i hreflanga w statycznym HTML i nie da się go podmienić po deployu. Wcześniej podstawiał się
+`localhost:3000`, co dawało canonical wskazujący na nieosiągalny host.
+
+Bez dwóch pozostałych formularz działa i loguje zgłoszenia po stronie serwera — patrz
+[ADR-0002](.agents/decisions/0002-lead-delivery.md).
 
 ## Stan projektu
 
-Gotowe: tooling i bramka jakości (122 testy), design system, wszystkie sekcje, dwujęzyczność
+Gotowe: tooling i bramka jakości (140 testów), design system, wszystkie sekcje, dwujęzyczność
 (oba języki prerenderowane statycznie), drawer usług z cennikiem, przenoszenie wyboru do
 formularza, SEO (metadane per locale, `hreflang`, robots, sitemap, manifest, favicon).
 

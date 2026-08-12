@@ -1,8 +1,15 @@
 /**
  * Single source of truth for brand-level facts: name, contact details, opening
- * hours, social links. Referenced by the footer, the final CTA, metadata and the
- * JSON-LD block, so a change here propagates everywhere.
+ * hours, social links. Referenced by the footer, the final CTA and metadata, so a
+ * change here propagates everywhere.
+ *
+ * The address, phone number and social links are still placeholders. They have to be
+ * real before launch — and before any `LocalBusiness` JSON-LD is added on top of them
+ * (.agents/08-accessibility-and-performance.md), because structured data repeating a
+ * fictional address is misleading markup, not a missing feature.
  */
+
+import { resolveSiteUrl } from '@/lib/seo/site-url'
 
 export const siteConfig = {
   name: 'VANTA',
@@ -39,9 +46,11 @@ export const siteConfig = {
 
 /**
  * Absolute origin of the deployment. Needed for metadataBase, Open Graph and the
- * sitemap. Falls back to localhost so `next build` never fails on a missing var.
+ * sitemap. Localhost is a development convenience only — a production build without
+ * `NEXT_PUBLIC_SITE_URL` fails instead of shipping a canonical nobody can resolve.
+ * See `@/lib/seo/site-url`.
  */
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(
-  /\/$/,
-  '',
+export const siteUrl = resolveSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL,
+  process.env.NODE_ENV === 'production',
 )
