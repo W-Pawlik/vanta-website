@@ -1,0 +1,19 @@
+# Normalise line endings to LF in the repository and in every working tree.
+#
+# Without this, a clone on Windows checks files out as CRLF while Prettier and
+# .editorconfig both expect LF — so `pnpm format:check` fails on a fresh clone even
+# though nothing was edited. CI on Linux would pass and the developer's machine would
+# not, which is the worst kind of disagreement.
+* text=auto eol=lf
+
+# Binary assets: never touch them.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Lockfile is generated; keep it out of diff reviews.
+pnpm-lock.yaml -diff linguist-generated
