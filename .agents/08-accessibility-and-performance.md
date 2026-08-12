@@ -120,7 +120,27 @@ Mimo że jest to projekt portfolio, strona ma wyglądać jak produkcyjna realiza
 - Metadane budujemy przez `buildMetadata()` z `@/lib/seo/metadata`. Nie piszemy obiektu `Metadata` od zera w route.
 - Lokalne SEO: `Auto Detailing Warszawa | VANTA`.
 - Open Graph i Twitter card spójne, obraz 1200 × 630.
-- `robots.ts`, `sitemap.ts`, `manifest.ts` już istnieją. `/system` jest wyłączona z indeksowania.
+- `robots.ts`, `sitemap.ts`, `manifest.ts` już istnieją.
 - Treść musi być w źródle HTML — to konsekwencja trzymania sekcji na serwerze.
 - Favicon i ikony PWA to zadanie na etap assetów. Manifest celowo nie wskazuje jeszcze ikon.
 - Warto dodać JSON-LD `LocalBusiness` / `AutoRepair` z danych `siteConfig` — jeden `<script type="application/ld+json">`.
+  **Warunek: najpierw prawdziwy adres, telefon i profile social w `site.ts`.** Znaczniki powtarzające
+  dane zastępcze to markup wprowadzający w błąd. `Review` / `AggregateRating` są poza zakresem, dopóki
+  opinie są treścią demonstracyjną.
+
+### Niepodważalne reguły SEO
+
+Każda z nich ma test-strażnika — patrz `site-url.test.ts`, `metadata.test.ts`, `robots.test.ts`,
+`sitemap.test.ts`, `proxy.test.ts`.
+
+- **Origin produkcyjny jest wymagany.** `NEXT_PUBLIC_SITE_URL` musi być adresem `https://`, a build
+  produkcyjny bez niego pada (`resolveSiteUrl`). Oba locale są statyczne, więc canonical i hreflang
+  są zapiekane w HTML — błędny origin jest nienaprawialny po deployu.
+- **`x-default` towarzyszy każdemu zestawowi `hreflang`** i wskazuje ścieżkę bez prefiksu locale,
+  bo to ona negocjuje język w proxy. Zestaw w sitemapie i w stronie musi być identyczny.
+- **Nie łączymy `Disallow` z `noindex`** dla tego samego URL-a. Crawler, którego nie wpuszczono na
+  stronę, nigdy nie przeczyta jej `noindex`. `/system` jest wyłączona z indeksu wyłącznie metadanymi.
+- **Odpowiedź zależna od nagłówka deklaruje `Vary`.** Redirect locale w `proxy.ts` zależy od
+  `Accept-Language` i musi to ogłaszać, inaczej współdzielony cache poda zły język.
+- **Bez sztucznej świeżości.** `lastModified` w sitemapie tylko z prawdziwej daty zmiany treści,
+  nigdy z zegara builda.
