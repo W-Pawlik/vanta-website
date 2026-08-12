@@ -1,0 +1,53 @@
+/**
+ * Custom utilities — only for things Tailwind cannot already express.
+ * Before adding one, check that a composition of existing utilities or a UI
+ * primitive in src/components/ui wouldn't be the better home.
+ */
+
+/* Escape the shell container and run to both viewport edges. */
+@utility bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+/* Horizontal sliders (testimonials, case studies) scroll without a visible bar. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/**
+ * Scroll indicator: a hairline that fills downward, then empties downward.
+ * Purely decorative, and silenced by the reduced-motion block in base.css.
+ */
+@keyframes scroll-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+/* Row of text that animates in from behind a mask. The child does the moving. */
+@utility mask-row {
+  display: block;
+  overflow: hidden;
+  /* Descenders must not be clipped by the mask. */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}

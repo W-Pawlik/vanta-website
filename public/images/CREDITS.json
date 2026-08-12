@@ -1,0 +1,122 @@
+[
+  {
+    "slot": "before-after-paint",
+    "file": "before-after-paint.jpg",
+    "id": "a-U02mxH6gw",
+    "author": "Sylwia Bartyzel",
+    "authorUrl": "https://unsplash.com/@sylwiabartyzel",
+    "photoUrl": "https://unsplash.com/photos/sleek-black-car-surface-with-vibrant-red-and-orange-reflections-a-U02mxH6gw",
+    "sourceRatio": 1.5,
+    "downloadedWidth": 2400
+  },
+  {
+    "slot": "final-cta-bmw-m3-fog",
+    "file": "final-cta-bmw-m3-fog.jpg",
+    "id": "xipq_ItleeY",
+    "author": "Samuele Errico Piccarini",
+    "authorUrl": "https://unsplash.com/@samuele_piccarini",
+    "photoUrl": "https://unsplash.com/photos/white-bmw-m-3-coupe-xipq_ItleeY",
+    "sourceRatio": 1.509,
+    "downloadedWidth": 2560
+  },
+  {
+    "slot": "hero-mercedes-cls",
+    "file": "hero-mercedes-cls.jpg",
+    "id": "FMbWFDiVRPs",
+    "author": "Samuele Errico Piccarini",
+    "authorUrl": "https://unsplash.com/@samuele_piccarini",
+    "photoUrl": "https://unsplash.com/photos/black-sedan-FMbWFDiVRPs",
+    "sourceRatio": 1.6,
+    "downloadedWidth": 2560
+  },
+  {
+    "slot": "og-default",
+    "file": "og-default.jpg",
+    "id": "FMbWFDiVRPs",
+    "author": "Samuele Errico Piccarini",
+    "authorUrl": "https://unsplash.com/@samuele_piccarini",
+    "photoUrl": "https://unsplash.com/photos/black-sedan-FMbWFDiVRPs",
+    "sourceRatio": 1.6,
+    "downloadedWidth": 1200
+  },
+  {
+    "slot": "service-ceramic-coating",
+    "file": "service-ceramic-coating.jpg",
+    "id": "fi9zsbf3f5Y",
+    "author": "Tuomas Nylund",
+    "authorUrl": "https://unsplash.com/@tuomasnylund",
+    "photoUrl": "https://unsplash.com/photos/a-close-up-of-a-black-car-with-rain-drops-on-it-fi9zsbf3f5Y",
+    "sourceRatio": 1.5,
+    "downloadedWidth": 1200
+  },
+  {
+    "slot": "service-full-detail",
+    "file": "service-full-detail.jpg",
+    "id": "ezfpfyYfRxw",
+    "author": "Rana Singh",
+    "authorUrl": "https://unsplash.com/@ceorana",
+    "photoUrl": "https://unsplash.com/photos/a-black-sports-car-parked-in-a-garage-ezfpfyYfRxw",
+    "sourceRatio": 1.5,
+    "downloadedWidth": 1200
+  },
+  {
+    "slot": "service-interior",
+    "file": "service-interior.jpg",
+    "id": "DEkh_LIUXDs",
+    "author": "Clay LeConey",
+    "authorUrl": "https://unsplash.com/@clayleconey",
+    "photoUrl": "https://unsplash.com/photos/a-close-up-of-a-black-leather-seat-DEkh_LIUXDs",
+    "sourceRatio": 1.5,
+    "downloadedWidth": 1200
+  },
+  {
+    "slot": "service-paint-correction",
+    "file": "service-paint-correction.jpg",
+    "id": "z6o7bOvvalU",
+    "author": "Luay Barani",
+    "authorUrl": "https://unsplash.com/@luaybarani",
+    "photoUrl": "https://unsplash.com/photos/a-person-polishes-a-dark-car-with-an-electric-polisher-z6o7bOvvalU",
+    "sourceRatio": 1.779,
+    "downloadedWidth": 1200
+  },
+  {
+    "slot": "work-alpine-a110",
+    "file": "work-alpine-a110.jpg",
+    "id": "cfWuOCuGJ8Q",
+    "author": "Lorenzo Gerosa",
+    "authorUrl": "https://unsplash.com/@gerolori",
+    "photoUrl": "https://unsplash.com/photos/black-camera-on-brown-and-black-marble-surface-cfWuOCuGJ8Q",
+    "sourceRatio": 0.667,
+    "downloadedWidth": 1200
+  },
+  {
+    "slot": "work-amg-studio",
+    "file": "work-amg-studio.jpg",
+    "id": "zgAWKHN7PHs",
+    "author": "Matthew McKinney",
+    "authorUrl": "https://unsplash.com/@matthewmckinney",
+    "photoUrl": "https://unsplash.com/photos/sleek-sports-car-illuminated-against-a-dark-background-zgAWKHN7PHs",
+    "sourceRatio": 1.778,
+    "downloadedWidth": 1800
+  },
+  {
+    "slot": "work-maserati",
+    "file": "work-maserati.jpg",
+    "id": "7pi0u027EVs",
+    "author": "Luca Freddi",
+    "authorUrl": "https://unsplash.com/@fresco97",
+    "photoUrl": "https://unsplash.com/photos/black-maserati-sports-car-with-red-interior-7pi0u027EVs",
+    "sourceRatio": 1.497,
+    "downloadedWidth": 1500
+  },
+  {
+    "slot": "work-porsche-911",
+    "file": "work-porsche-911.jpg",
+    "id": "izfwjYWOlD4",
+    "author": "Samuel Hagger",
+    "authorUrl": "https://unsplash.com/@samuel_hagger",
+    "photoUrl": "https://unsplash.com/photos/a-sleek-black-porsche-parked-on-the-street-izfwjYWOlD4",
+    "sourceRatio": 2,
+    "downloadedWidth": 2000
+  }
+]

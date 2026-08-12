@@ -1,0 +1,15 @@
+/**
+ * Stylesheet entry point. Imported once, from src/app/layout.tsx.
+ * Import order matters: Tailwind first, then tokens, then base, then utilities.
+ */
+
+@import 'tailwindcss';
+
+/* Class detection is scoped to the source tree explicitly rather than relying on
+ * auto-detection, so a stray class name in a config or fixture file can't leak
+ * into the production stylesheet. */
+@source '../';
+
+@import './theme.css';
+@import './base.css';
+@import './utilities.css';

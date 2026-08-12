@@ -1,0 +1,168 @@
+/**
+ * Design tokens — the single source of truth for VANTA's visual language.
+ *
+ * Everything here becomes a Tailwind utility (`bg-surface`, `text-display-hero`,
+ * `py-section`, `ease-out-expo`, ...). Components must not hardcode hex values,
+ * pixel type sizes or bezier curves; if a value is missing, add a token here.
+ *
+ * Reference: .agents/02-design-system.md
+ */
+
+@theme {
+  /* ---------------------------------------------------------------------------
+   * Colour — dark automotive premium. Never pure #000: the depth of the page
+   * comes from the small steps between canvas / surface / raised.
+   * ------------------------------------------------------------------------- */
+  --color-canvas: #0a0a0a;
+  --color-canvas-warm: #0d0d0c;
+  /* Footer sits a step below the page so the document has a visible bottom. */
+  --color-canvas-deep: #080808;
+  --color-surface: #121212;
+  --color-surface-raised: #171717;
+
+  /* Light interlude — used by the Process section to break the page rhythm.
+   * Slightly warm, so it reads as paper rather than as a grey panel. */
+  --color-canvas-invert: #eceae4;
+
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.15);
+  --color-line-invert: rgba(0, 0, 0, 0.1);
+  --color-line-invert-strong: rgba(0, 0, 0, 0.2);
+
+  /* ---------------------------------------------------------------------------
+   * Text hierarchy — four steps, not two. Without the middle steps every piece
+   * of copy reads either as a headline or as disabled.
+   * ------------------------------------------------------------------------- */
+  --color-content: #f2f2ee;
+  /* Body copy. The default for anything meant to be read. */
+  --color-content-secondary: rgba(242, 242, 238, 0.68);
+  /* Metadata, captions, eyebrow labels. */
+  --color-content-tertiary: rgba(242, 242, 238, 0.42);
+  /* Decorative only — dividers in type, inactive counters. Never for prose. */
+  --color-content-ghost: rgba(242, 242, 238, 0.16);
+  /* Resting state of scroll-lit text (manifesto). Not a text colour to read. */
+  --color-content-dim: #292929;
+
+  --color-content-invert: #101010;
+  --color-content-invert-secondary: rgba(16, 16, 16, 0.66);
+  --color-content-invert-tertiary: rgba(16, 16, 16, 0.42);
+
+  /* Racing lime, pulled back from a fluorescent marker towards a control lamp.
+   * Used like a warning light in a sports car: rarely, on purpose. */
+  --color-accent: #c3f53b;
+  --color-accent-hover: #d2fa66;
+  --color-accent-contrast: #0a0a0a;
+
+  --color-danger: #ff5c47;
+
+  /* ---------------------------------------------------------------------------
+   * Display typography — five distinct steps. When every large heading is the
+   * same size, none of them carries weight.
+   *
+   * Desktop targets (1440): hero 104 · statement 88 · section 70 · project 34 ·
+   * card 30. Tracking tightens as size grows, so big type reads as one block.
+   * ------------------------------------------------------------------------- */
+  --text-display-hero: clamp(2.75rem, 7.2vw, 7.25rem);
+  --text-display-hero--line-height: 0.88;
+  --text-display-hero--letter-spacing: -0.055em;
+  --text-display-hero--font-weight: 600;
+
+  --text-display-statement: clamp(2.375rem, 6.1vw, 6.125rem);
+  --text-display-statement--line-height: 0.9;
+  --text-display-statement--letter-spacing: -0.05em;
+  --text-display-statement--font-weight: 600;
+
+  --text-display-section: clamp(2rem, 4.9vw, 5.125rem);
+  --text-display-section--line-height: 0.92;
+  --text-display-section--letter-spacing: -0.045em;
+  --text-display-section--font-weight: 600;
+
+  --text-display-project: clamp(1.5rem, 2.4vw, 2.375rem);
+  --text-display-project--line-height: 1;
+  --text-display-project--letter-spacing: -0.03em;
+  --text-display-project--font-weight: 600;
+
+  --text-display-card: clamp(1.5rem, 2.1vw, 2.125rem);
+  --text-display-card--line-height: 1.05;
+  --text-display-card--letter-spacing: -0.025em;
+  --text-display-card--font-weight: 600;
+
+  /* Stats. Wireframe: 80–110 px at 1440. */
+  --text-numeric: clamp(3rem, 7vw, 6.875rem);
+  --text-numeric--line-height: 0.9;
+  --text-numeric--letter-spacing: -0.045em;
+  --text-numeric--font-weight: 600;
+
+  /* Testimonial quote. Wireframe: 42–56 px at 1440. */
+  --text-quote: clamp(1.75rem, 3.6vw, 3.5rem);
+  --text-quote--line-height: 1.12;
+  --text-quote--letter-spacing: -0.025em;
+  --text-quote--font-weight: 500;
+
+  /* ---------------------------------------------------------------------------
+   * Body — nothing meant to be read drops below 15px.
+   * ------------------------------------------------------------------------- */
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.55;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.55;
+
+  /* Section eyebrows: `01 / THE STANDARD`. Mono, uppercase, widely tracked. */
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.16em;
+  --text-label--font-weight: 500;
+
+  /* The only step allowed below 15px, and only for true metadata. */
+  --text-meta: 0.75rem;
+  --text-meta--line-height: 1.35;
+  --text-meta--letter-spacing: 0.12em;
+  --text-meta--font-weight: 500;
+
+  /* ---------------------------------------------------------------------------
+   * Layout — wide shell, varied vertical rhythm, narrow measure for prose.
+   * ------------------------------------------------------------------------- */
+  --container-shell: 80rem; /* 1280px — the design container */
+  --container-wide: 90rem; /* 1440px — only above the 3xl breakpoint */
+  --container-measure: 38rem; /* ~610px — max line length for body copy */
+
+  /* Above 1600px the container is allowed to grow to 1440px. */
+  --breakpoint-3xl: 100rem;
+
+  /* Five steps, deliberately interleaved across the page. Rhythm matters more
+   * than using one consistent value everywhere — see .agents/02-design-system.md. */
+  --spacing-section-xl: clamp(7rem, 13vw, 12.5rem); /* 200 */
+  --spacing-section-lg: clamp(6rem, 11.5vw, 11.25rem); /* 180 */
+  --spacing-section: clamp(5rem, 9vw, 8.75rem); /* 140 */
+  --spacing-section-sm: clamp(4.5rem, 7.5vw, 7.5rem); /* 120 */
+  --spacing-section-tight: clamp(3.5rem, 6vw, 6.25rem); /* 100 */
+  --spacing-gutter: clamp(1.25rem, 4vw, 5rem);
+
+  /* ---------------------------------------------------------------------------
+   * Radii — one system, deliberately tighter than before. Automotive
+   * performance reads with sharper geometry than a SaaS dashboard.
+   * ------------------------------------------------------------------------- */
+  --radius-control: 0.625rem; /* 10px — buttons, inputs */
+  --radius-image: 0.875rem; /* 14px — media frames */
+  --radius-panel: 1.125rem; /* 18px — large panels, sticky navbar */
+
+  /* ---------------------------------------------------------------------------
+   * Easing — decisive start, soft settle. Avoid symmetric ease-in-out.
+   * Mirrored in src/lib/motion/tokens.ts for JS-driven animation.
+   * ------------------------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Keyframes live in src/styles/utilities.css. */
+  --animate-scroll-line: scroll-line 2.4s var(--ease-in-out-quart) infinite;
+}
+
+@theme inline {
+  --font-display: var(--font-inter-tight);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}

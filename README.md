@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VANTA Auto Detailing
 
-## Getting Started
+Strona wizerunkowo-sprzedażowa studia detailingu premium. Jedna strona, kilkanaście sekcji,
+formularz wyceny krokowy, interaktywny slider before/after, motion design.
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Motion for React · GSAP + ScrollTrigger · Zod · Vitest
+
+## Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `http://localhost:3000` — strona
+- `http://localhost:3000/system` — referencja design systemu (tokeny, primitives, motion)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Polecenia
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Polecenie                           | Opis                                          |
+| ----------------------------------- | --------------------------------------------- |
+| `pnpm dev`                          | serwer developerski (Turbopack)               |
+| `pnpm build`                        | build produkcyjny                             |
+| `pnpm start`                        | serwer produkcyjny                            |
+| `pnpm check`                        | format + lint + typy + testy — bramka jakości |
+| `pnpm test` / `pnpm test:watch`     | testy jednostkowe                             |
+| `pnpm test:coverage`                | pokrycie z progami                            |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint                                        |
+| `pnpm format` / `pnpm format:check` | Prettier                                      |
+| `pnpm typecheck`                    | `tsc --noEmit`                                |
 
-## Learn More
+## Struktura
 
-To learn more about Next.js, take a look at the following resources:
+```
+.agents/            kontrakt projektu: brief, design system, architektura, zasady, ADR-y
+src/
+  app/              routing, metadane, pliki konwencji Next
+  components/
+    layout/         Navbar, Footer, MobileMenu, MobileStickyCta
+    sections/       sekcje strony
+    ui/             primitives bez wiedzy o domenie
+    motion/         primitives animacyjne (klienckie)
+  hooks/            hooki wielokrotnego użytku
+  lib/              motion (tokeny, warianty, GSAP), seo, utils, validation
+  data/             treść jako typowane obiekty TypeScript
+  server/lead/      Server Action formularza + warstwa dostarczania
+  styles/           globals, theme (tokeny), base, utilities
+public/images/      zdjęcia
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Dokumentacja
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Cała wiedza projektowa jest w [`.agents/`](.agents/README.md) — brief, identyfikacja wizualna,
+system stylów, architektura, praktyki kodowania, system animacji, podejście do testów,
+dostępność i wydajność, zasady copy, checklisty i decyzje architektoniczne.
 
-## Deploy on Vercel
+Zaczynając pracę (człowiek albo AI), przeczytaj [`.agents/README.md`](.agents/README.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stan projektu
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Gotowe: tooling i bramka jakości, design system (tokeny + primitives), primitives animacyjne,
+walidacja i backend formularza, SEO (metadane, robots, sitemap, manifest), strona `/system`.
+
+Do zrobienia: sekcje strony (`src/components/sections/`), assety fotograficzne,
+podłączenie dostawcy e-mail dla formularza ([ADR-0002](.agents/decisions/0002-lead-delivery.md)).

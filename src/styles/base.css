@@ -1,0 +1,99 @@
+/**
+ * Base layer — document defaults only. Anything component-specific belongs in
+ * the component, expressed with Tailwind utilities.
+ */
+
+:root {
+  /* Duration scale. Not a Tailwind theme namespace, so consume it as
+   * `duration-[var(--duration-base)]` in CSS transitions.
+   * Mirrored in src/lib/motion/tokens.ts for JS-driven animation. */
+  --duration-instant: 120ms;
+  --duration-fast: 200ms;
+  --duration-base: 320ms;
+  --duration-slow: 480ms;
+  --duration-reveal: 800ms;
+  --duration-hero: 1600ms;
+
+  /* Navbar: 88px at rest, 66px once the page has been scrolled. */
+  --navbar-height: 5.5rem;
+  --navbar-height-scrolled: 4.125rem;
+  /* Inset of the floating navbar from the viewport edges, and its own max width.
+   * Both are needed by the symmetry rule in navbar.tsx. */
+  --navbar-inset: 1rem;
+  --navbar-max-width: 92.5rem; /* 1480px */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Anchor links must not land under the sticky navbar. */
+    scroll-padding-top: var(--navbar-height);
+    background-color: var(--color-canvas);
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-content);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    /* Horizontal overflow is always a bug here — full-bleed media must be
+     * clipped by its own container, not by the document. */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, on-brand focus ring for every keyboard-reachable element. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+
+  /* Media is always block-level and never overflows its box. */
+  img,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+/**
+ * Reduced motion. This is the CSS half of the contract; the JS half lives in
+ * useReducedMotion() and the GSAP matchMedia setup.
+ * See .agents/05-animation-system.md.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
