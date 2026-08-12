@@ -86,18 +86,19 @@ Nie zgadza się z numeracją z briefu (tam Hero był bez numeru, a Services mia�
 
 ## Zdjęcia
 
-12 plików w `public/images/`, wszystkie Unsplash na wolnej licencji.
+13 plików w `public/images/`. Jedenaście z Unsplash na wolnej licencji, dwa (para przed/po)
+dostarczone przez właściciela repozytorium.
 Atrybucje: `public/images/CREDITS.json`. Pobrane skryptem, płatne Unsplash+ odrzucane twardo.
 
-| Slot           | Zdjęcie                                                                   | Uwaga                                                                                  |
-| -------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Hero           | `hero-mercedes-cls.jpg`                                                   | Mercedes CLS, światło krawędziowe, ogromna czerń na typografię                         |
-| Services 01–04 | `service-*.jpg`                                                           | polerowanie, hydrofobowość, skóra, całe auto w garażu                                  |
-| Before/After   | `before-after-paint.jpg`                                                  | **makro lakieru** — na całym aucie „przed" czyta się tylko jako ciemniejsza ekspozycja |
-| Selected Work  | `work-porsche-911` (2:1), `work-amg-studio` (16:9), `work-maserati` (3:2) | trzy realizacje w jednym języku fotograficznym                                         |
-| Zamknięcie     | `work-alpine-a110` (2:3)                                                  | editorial przerywnik „THE FINISH", nie case study                                      |
-| Final CTA      | `final-cta-bmw-m3-fog.jpg`                                                | BMW M3 we mgle, reflektory — cinematic finish                                          |
-| OG             | `og-default.jpg`                                                          | kadr 1200 × 630 z hero                                                                 |
+| Slot           | Zdjęcie                                                                   | Uwaga                                                                    |
+| -------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Hero           | `hero-mercedes-cls.jpg`                                                   | Mercedes CLS, światło krawędziowe, ogromna czerń na typografię           |
+| Services 01–04 | `service-*.jpg`                                                           | polerowanie, hydrofobowość, skóra, całe auto w garażu                    |
+| Before/After   | `before-after-porsche-{before,after}.jpg`                                 | **prawdziwa para** — ten sam bok Porsche przed i po korekcie, 1376 × 768 |
+| Selected Work  | `work-porsche-911` (2:1), `work-amg-studio` (16:9), `work-maserati` (3:2) | trzy realizacje w jednym języku fotograficznym                           |
+| Zamknięcie     | `work-alpine-a110` (2:3)                                                  | editorial przerywnik „THE FINISH", nie case study                        |
+| Final CTA      | `final-cta-bmw-m3-fog.jpg`                                                | BMW M3 we mgle, reflektory — cinematic finish                            |
+| OG             | `og-default.jpg`                                                          | kadr 1200 × 630 z hero                                                   |
 
 ### Wymienione po review
 
@@ -110,36 +111,30 @@ Review słusznie wskazał, że cztery realizacje wyglądały „jakby pochodził
 Nowe kadry są w jednym języku: ciemne studio albo salon, kontrolowane światło, refleksy na lakierze,
 głęboka czerń. Nazwy realizacji nadal zgodne z tym, co faktycznie jest na zdjęciu.
 
-### Before / After — stan zdjęć
+### Before / After — prawdziwa para
 
-**Nie mamy prawdziwej pary przed/po.** Sprawdzone: Unsplash (około dziesięciu sformułowań
-zapytań), a Pexels i Pixabay wymagają klucza API. Wolne banki nie oferują dwóch kadrów tego
-samego panelu w dwóch stanach. Kadry "w trakcie" — mycie gąbką, polerka na reflektorze — są
-dostępne, ale to nie jest przed/po.
+Sekcja Transformation korzysta z **realnej pary**: ten sam bok Porsche, ten sam garaż, ten sam
+kadr i identyczna rozdzielczość 1376 × 768, sfotografowane przed i po korekcie lakieru.
+Swirle i mikrozarysowania po lewej stronie to faktyczne defekty, nie filtr CSS.
 
-Dlatego `caseStudy` ma **dwa osobne pola**: `beforeImage` i `afterImage`.
+Zdjęcia dostarczył właściciel repozytorium — nie pochodzą z Unsplash, co jest zapisane
+w `public/images/CREDITS.json`.
 
-- Kiedy wskazują **różne** pliki, slider pokazuje oba zdjęcia bez żadnej obróbki i oba
-  dostają prawdziwy `alt`.
-- Kiedy wskazują **ten sam** plik, i tylko wtedy, lewa połowa jest przygaszana filtrem CSS,
-  żeby dało się zademonstrować mechanikę.
+Symulacja **nie została usunięta z kodu**, tylko przestała się uruchamiać. `caseStudy` ma dwa
+osobne pola, a przygaszenie lewej połowy włącza się wyłącznie wtedy, gdy `beforeImage` równa
+się `afterImage`. Pilnują tego dwa testy w `before-after-slider.test.tsx`: jeden sprawdza
+fallback, drugi że filtr **znika**, gdy ścieżki są różne.
 
-Fallback jest warunkowy celowo: podmiana na prawdziwą parę usuwa symulację automatycznie, a
-nie "kiedyś, gdy ktoś sobie przypomni". Pilnują tego dwa testy w
-`before-after-slider.test.tsx` — jeden sprawdza, że filtr jest w trybie fallbacku, drugi że
-**znika**, gdy ścieżki są różne.
+Uwaga o rozdzielczości: 1376 px to natywny rozmiar źródeł, a slider potrafi zająć 1280 px CSS.
+Na ekranach 2× kadr będzie więc miękki. Skrypt przygotowania zdjęć celowo nie powiększa
+źródła (`withoutEnlargement`) — dorysowanych pikseli nie byłoby widać jako ostrości.
 
-#### Jak wstawić prawdziwą parę
+#### Podmiana na inną parę
 
-1. Wrzuć dwa pliki do `public/images/`.
-2. Zmień `beforeImage` i `afterImage` w `src/data/case-study.ts`.
-3. Popraw `beforeAfter.imageAlt` i `beforeAfter.beforeAlt` w obu słownikach.
-
-Nic więcej — żadnej zmiany w komponencie.
-
-Najprostszy sposób zdobycia realnej pary: zakleić taśmą linię przez środek jednego panelu,
-wypolerować jedną połowę, zrobić dwa zdjęcia w tym samym świetle i kadrze. Detailerzy
-nazywają to kadrem 50/50 i robią to rutynowo.
+1. dwa pliki do `public/images/`,
+2. `beforeImage` i `afterImage` w `src/data/case-study.ts`,
+3. `beforeAfter.car`, `scope`, `imageAlt` i `beforeAlt` w obu słownikach,
+4. `pnpm images:prepare` — optymalizacja i regeneracja blur placeholderów.
 
 ## Dane
 

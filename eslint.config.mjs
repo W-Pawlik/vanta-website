@@ -64,6 +64,16 @@ const eslintConfig = defineConfig([
     },
   },
 
+  {
+    // Node CLI tools for asset preparation. Printing to stdout is their whole purpose,
+    // and they never ship to the browser.
+    name: 'vanta/scripts',
+    files: ['scripts/**/*.mjs'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+
   prettier,
 
   globalIgnores(['.next/**', 'out/**', 'build/**', 'coverage/**', 'next-env.d.ts']),

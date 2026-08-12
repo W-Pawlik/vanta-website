@@ -69,6 +69,26 @@ Pełny kontrakt w [05-animation-system.md](05-animation-system.md). Wymóg, nie 
 - Galeria realizacji nie ładuje wszystkich zdjęć na start.
 - Above the fold: logo, hero, pierwszy content. Wszystko inne później.
 
+### Przygotowanie plików
+
+Zdjęcia nie trafiają do repo w takim rozmiarze, w jakim przyszły. Przed commitem:
+
+```bash
+pnpm images:prepare
+```
+
+- Każdy plik ma w skrypcie zapisany **docelowy rozmiar wyprowadzony z layoutu** (najszerszy
+  boks CSS × 2 dla ekranów o dużej gęstości, potem ścięty tam, gdzie detal przestaje być
+  widoczny). Progi są w `TARGETS` w `scripts/prepare-images.mjs`.
+- Skrypt generuje też `src/lib/images/blur.ts`. Statyczne ścieżki nie dostają
+  `blurDataURL` automatycznie, więc każdy `next/image` dostaje go przez
+  `{...blurProps(src)}`. Bez tego zostaje skok „pusta ramka → zdjęcie", którego samo
+  zmniejszenie plików nie usuwa.
+- Dodajesz zdjęcie → dopisz je do `TARGETS` i uruchom skrypt. Bez tego obrazek nadal się
+  wyświetli, ale bez placeholdera i w oryginalnym rozmiarze.
+
+Pełne uzasadnienie: [ADR-0006](decisions/0006-sharp-for-asset-preparation.md).
+
 ### Animacja
 
 - Animujemy tylko `transform` i `opacity`.

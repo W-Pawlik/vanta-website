@@ -5,6 +5,7 @@ import { useInView } from 'motion/react'
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { blurProps } from '@/lib/images/blur'
 import { cn } from '@/lib/utils/cn'
 
 type BeforeAfterSliderProps = {
@@ -29,24 +30,19 @@ const HINT_HOLD_MS = 620
 const HINT_RETURN_MS = 1240
 
 /**
- * Drag-to-compare slider over a **macro paint shot**.
+ * Drag-to-compare slider over two independent photographs.
  *
- * The macro is deliberate: on a whole-car photo a "before" reads as nothing more
- * than a darker exposure, while on a panel the eye immediately reads haze versus
- * clarity, and flat versus sharp reflections. That is what a detailing customer
- * is actually looking for.
+ * When `beforeImage` and `afterImage` differ — which is the case now that a real pair of
+ * the same Porsche flank exists — both are shown untouched and both get real alt text.
  *
- * Two independent images. When  and  differ, both are shown as
- * they are and both get real alt text — a genuine comparison.
- *
- * When they are the **same file** there is no real pair, and only then does the left half
- * get degraded in CSS (haze, lost contrast, softened highlights) so the mechanic can be
- * demonstrated. The fallback is conditional by design: dropping in two real photographs
- * removes the simulation automatically, rather than leaving it to be noticed later.
+ * When they point at the **same file** there is no pair, and only then does the left half
+ * get degraded in CSS (haze, lost contrast, softened highlights) so the mechanic can still
+ * be demonstrated. The fallback is conditional by design: supplying two real photographs
+ * removes the simulation automatically rather than leaving it to be noticed later.
  * See .agents/specs/00-implementation-plan.md.
  *
- * Accessibility: the handle is a real slider (role, value, arrow keys), so the
- * comparison is reachable without a pointer.
+ * Accessibility: the handle is a real slider (role, value, arrow keys), so the comparison
+ * is reachable without a pointer.
  */
 export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAfterSliderProps) {
   const isSimulated = beforeImage === afterImage
@@ -158,6 +154,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAft
         fill
         priority={false}
         sizes="(max-width: 1024px) 100vw, 1280px"
+        {...blurProps(afterImage)}
         className="object-cover"
       />
 
@@ -175,6 +172,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAft
           aria-hidden={isSimulated ? 'true' : undefined}
           fill
           sizes="(max-width: 1024px) 100vw, 1280px"
+          {...blurProps(beforeImage)}
           className={cn(
             'object-cover',
             isSimulated && 'blur-[1.1px] brightness-[0.86] contrast-[0.68] saturate-[0.4]',

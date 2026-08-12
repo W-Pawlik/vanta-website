@@ -6,6 +6,9 @@ import { Headline } from '@/components/ui/headline'
 import { primaryCtaHref } from '@/data/navigation'
 import { siteConfig } from '@/data/site'
 import { getDictionary } from '@/i18n/server'
+import { blurProps } from '@/lib/images/blur'
+
+const CTA_IMAGE = '/images/final-cta-bmw-m3-fog.jpg'
 
 /**
  * Cinematic finish. Mirrors the hero deliberately — the page opens and closes on the
@@ -17,10 +20,11 @@ export async function FinalCTA() {
   return (
     <section className="relative isolate flex min-h-[75svh] items-end overflow-hidden py-section">
       <Image
-        src="/images/final-cta-bmw-m3-fog.jpg"
+        src={CTA_IMAGE}
         alt={dict.finalCta.imageAlt}
         fill
         sizes="100vw"
+        {...blurProps(CTA_IMAGE)}
         className="-z-20 object-cover object-center"
       />
       <div

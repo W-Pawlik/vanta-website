@@ -1,13 +1,21 @@
 [
   {
-    "slot": "before-after-paint",
-    "file": "before-after-paint.jpg",
-    "id": "a-U02mxH6gw",
-    "author": "Sylwia Bartyzel",
-    "authorUrl": "https://unsplash.com/@sylwiabartyzel",
-    "photoUrl": "https://unsplash.com/photos/sleek-black-car-surface-with-vibrant-red-and-orange-reflections-a-U02mxH6gw",
-    "sourceRatio": 1.5,
-    "downloadedWidth": 2400
+    "slot": "before-after-porsche-after",
+    "file": "before-after-porsche-after.jpg",
+    "source": "Dostarczone przez wlasciciela repozytorium",
+    "license": "Za zgoda wlasciciela - nie Unsplash",
+    "note": "Ten sam bok po dwuetapowej korekcie",
+    "sourceRatio": 1.792,
+    "downloadedWidth": 1376
+  },
+  {
+    "slot": "before-after-porsche-before",
+    "file": "before-after-porsche-before.jpg",
+    "source": "Dostarczone przez wlasciciela repozytorium",
+    "license": "Za zgoda wlasciciela - nie Unsplash",
+    "note": "Lakier przed korektą — swirle i mikrozarysowania",
+    "sourceRatio": 1.792,
+    "downloadedWidth": 1376
   },
   {
     "slot": "final-cta-bmw-m3-fog",

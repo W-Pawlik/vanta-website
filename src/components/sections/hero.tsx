@@ -6,7 +6,10 @@ import { Headline } from '@/components/ui/headline'
 import { SECTION_IDS, primaryCtaHref } from '@/data/navigation'
 import { socialProof } from '@/data/stats'
 import { getDictionary } from '@/i18n/server'
+import { blurProps } from '@/lib/images/blur'
 import { formatDecimal } from '@/lib/utils/format'
+
+const HERO_IMAGE = '/images/hero-mercedes-cls.jpg'
 
 /**
  * Full-viewport opener. The photograph is the only `priority` image on the page —
@@ -21,11 +24,12 @@ export async function Hero() {
   return (
     <section className="relative isolate flex min-h-svh flex-col justify-between overflow-hidden pb-10">
       <Image
-        src="/images/hero-mercedes-cls.jpg"
+        src={HERO_IMAGE}
         alt={dict.hero.imageAlt}
         fill
         priority
         sizes="100vw"
+        {...blurProps(HERO_IMAGE)}
         className="-z-20 object-cover object-[38%_64%]"
       />
 

@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 
 import { Overlay } from '@/components/ui/overlay'
+import { blurProps } from '@/lib/images/blur'
 import { DURATION, EASE } from '@/lib/motion/tokens'
 
 export type LightboxItem = {
@@ -64,6 +65,7 @@ export function WorkLightbox({ item, onClose, labels }: WorkLightboxProps) {
               alt={item.imageAlt}
               fill
               sizes="(max-width: 1280px) 100vw, 1152px"
+              {...blurProps(item.image)}
               className="object-cover"
             />
           </div>

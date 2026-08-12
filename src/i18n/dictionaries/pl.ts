@@ -258,15 +258,15 @@ export const pl = {
     after: 'Po VANTA',
     sliderLabel: 'Porównanie przed i po — przeciągnij lub użyj strzałek',
     sliderValue: 'widoku „przed”',
-    beforeAlt: 'Lakier przed korektą — widoczne zmatowienia i drobne zarysowania',
+    beforeAlt:
+      'Ten sam bok przed korektą — lakier pokryty swirlami i mikrozarysowaniami, refleksy rozmyte',
     caseLabel: 'Realizacja',
     scopeLabel: 'Zakres prac',
     durationLabel: 'Czas realizacji',
-    car: 'Mercedes-AMG GT',
-    scope: ['Korekta lakieru', 'Powłoka ceramiczna', 'Detailing wnętrza'],
+    car: 'Porsche',
+    scope: ['Dwuetapowa korekta lakieru', 'Powłoka ceramiczna', 'Zabezpieczenie felg'],
     duration: '2 dni',
-    imageAlt:
-      'Makro wypolerowanego czarnego lakieru — ostre refleksy świateł na powierzchni karoserii',
+    imageAlt: 'Bok czarnego Porsche po korekcie — ostre, głębokie refleksy świateł hali w lakierze',
   },
 
   work: {

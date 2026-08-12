@@ -11,6 +11,7 @@ import { SERVICE_TO_INTERESTS } from '@/data/lead-mapping'
 import { primaryCtaHref } from '@/data/navigation'
 import type { ServiceSlug } from '@/data/services'
 import { DURATION, EASE } from '@/lib/motion/tokens'
+import { blurProps } from '@/lib/images/blur'
 import { formatOrdinal, formatPriceFrom } from '@/lib/utils/format'
 
 import {
@@ -165,6 +166,7 @@ export function ServicesList({
                   width={640}
                   height={427}
                   sizes="100vw"
+                  {...blurProps(item.image)}
                   className="aspect-3/2 w-full rounded-image object-cover"
                 />
               </span>

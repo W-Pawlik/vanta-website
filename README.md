@@ -66,21 +66,29 @@ Zaczynając pracę — człowiek albo AI — przeczytaj [`.agents/README.md`](.a
 
 ## Zdjęcia
 
-12 plików w `public/images/`, wszystkie z Unsplash na wolnej licencji. Atrybucje w
-[`public/images/CREDITS.json`](public/images/CREDITS.json). Płatne Unsplash+ były odrzucane.
+13 plików w `public/images/`, razem ~930 kB. Jedenaście z Unsplash na wolnej licencji, dwa
+(para przed/po) dostarczone przez właściciela repo. Atrybucje i licencje w
+[`public/images/CREDITS.json`](public/images/CREDITS.json).
 
-### Wymiana zdjęć przed/po
+```bash
+pnpm images:prepare
+```
 
-Slider w sekcji Transformation działa na dwóch niezależnych polach. Dopóki wskazują **ten sam**
-plik, lewa połowa jest przygaszana filtrem CSS — bo prawdziwej pary przed/po nie ma
-w wolnych zasobach. Podmiana na realną parę:
+Jednorazowe narzędzie (nie wchodzi do CI): przekodowuje zdjęcia do największego rozmiaru, jaki
+layout potrafi wyświetlić, i regeneruje `src/lib/images/blur.ts` — podglądy 16 px jako
+`placeholder="blur"`. Pierwszy przebieg dał **2431 kB → 881 kB (−64 %)**. Szczegóły i progi:
+[ADR-0006](.agents/decisions/0006-sharp-for-asset-preparation.md).
+
+### Sekcja Transformation
+
+Slider porównuje **dwa niezależne zdjęcia** — obecnie prawdziwą parę tego samego boku Porsche
+przed i po korekcie. Symulacja (przygaszenie lewej połowy filtrem CSS) włącza się wyłącznie
+wtedy, gdy `beforeImage` i `afterImage` wskazują ten sam plik. Podmiana na inną parę:
 
 1. dwa pliki do `public/images/`,
 2. `beforeImage` i `afterImage` w `src/data/case-study.ts`,
-3. `beforeAfter.imageAlt` i `beforeAfter.beforeAlt` w `src/i18n/dictionaries/{pl,en}.ts`.
-
-Symulacja wyłącza się sama, gdy ścieżki przestaną być identyczne — pilnują tego dwa testy
-w `before-after-slider.test.tsx`.
+3. `beforeAfter.car`, `scope`, `imageAlt`, `beforeAlt` w `src/i18n/dictionaries/{pl,en}.ts`,
+4. `pnpm images:prepare`.
 
 ## Deployment
 

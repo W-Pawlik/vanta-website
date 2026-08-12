@@ -54,3 +54,4 @@ Co odrzucono i dlaczego.
 | [0003](0003-src-and-no-barrels.md)            | Katalog `src/`, brak plików barrel                        | Accepted |
 | [0004](0004-drop-lenis.md)                    | Rezygnacja z Lenis, native scroll                         | Accepted |
 | [0005](0005-i18n-routing-and-dictionaries.md) | Dwujęzyczność: routing per locale i słowniki              | Accepted |
+| [0006](0006-sharp-for-asset-preparation.md)   | sharp do przygotowania zdjec                              | Accepted |

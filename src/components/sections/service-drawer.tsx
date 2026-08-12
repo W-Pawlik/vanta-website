@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react'
 
 import { Overlay } from '@/components/ui/overlay'
 import { DURATION, EASE, STAGGER } from '@/lib/motion/tokens'
+import { blurProps } from '@/lib/images/blur'
 import { formatPriceFrom } from '@/lib/utils/format'
 
 export type DrawerVariant = {
@@ -186,6 +187,7 @@ function ServiceBody({
             width={840}
             height={560}
             sizes="(max-width: 1024px) 90vw, 42rem"
+            {...blurProps(service.image)}
             className="aspect-3/2 w-full object-cover"
           />
         </motion.div>

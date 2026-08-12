@@ -13,6 +13,7 @@ import { useRef, useState, type PointerEvent } from 'react'
 
 import { useHasFinePointer } from '@/hooks/use-media-query'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { blurProps } from '@/lib/images/blur'
 import { cn } from '@/lib/utils/cn'
 import { formatOrdinal } from '@/lib/utils/format'
 
@@ -231,6 +232,7 @@ function Frame({
           alt={frame.imageAlt}
           fill
           sizes={sizes}
+          {...blurProps(frame.image)}
           className="object-cover transition-transform duration-[var(--duration-slow)] ease-out-quart group-hover:scale-[1.03]"
         />
       </motion.span>

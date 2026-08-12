@@ -258,14 +258,16 @@ export const en: Dictionary = {
     after: 'After VANTA',
     sliderLabel: 'Before and after comparison — drag or use the arrow keys',
     sliderValue: 'of the “before” view',
-    beforeAlt: 'Paint before correction — visible dullness and light scratches',
+    beforeAlt:
+      'The same flank before correction — swirl marks and micro-scratches, reflections diffused',
     caseLabel: 'Project',
     scopeLabel: 'Scope of work',
     durationLabel: 'Turnaround',
-    car: 'Mercedes-AMG GT',
-    scope: ['Paint correction', 'Ceramic coating', 'Interior detail'],
+    car: 'Porsche',
+    scope: ['Two-stage paint correction', 'Ceramic coating', 'Wheel protection'],
     duration: '2 days',
-    imageAlt: 'Macro of polished black paint — sharp light reflections across the body panel',
+    imageAlt:
+      'Flank of a black Porsche after correction — sharp, deep reflections of the shop lights',
   },
 
   work: {
