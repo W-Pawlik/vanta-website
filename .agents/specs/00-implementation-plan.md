@@ -110,14 +110,36 @@ Review słusznie wskazał, że cztery realizacje wyglądały „jakby pochodził
 Nowe kadry są w jednym języku: ciemne studio albo salon, kontrolowane światło, refleksy na lakierze,
 głęboka czerń. Nazwy realizacji nadal zgodne z tym, co faktycznie jest na zdjęciu.
 
-### Before / After — ważne ograniczenie
+### Before / After — stan zdjęć
 
-**Nie mamy prawdziwej pary przed/po.** Wolne banki zdjęć jej nie oferują.
-Slider pokazuje **to samo zdjęcie** po obu stronach; strona „przed" jest przetworzona filtrem CSS
-(desaturacja, obniżony kontrast, delikatne rozmycie), żeby zademonstrować **mechanikę** interakcji.
+**Nie mamy prawdziwej pary przed/po.** Sprawdzone: Unsplash (około dziesięciu sformułowań
+zapytań), a Pexels i Pixabay wymagają klucza API. Wolne banki nie oferują dwóch kadrów tego
+samego panelu w dwóch stanach. Kadry "w trakcie" — mycie gąbką, polerka na reflektorze — są
+dostępne, ale to nie jest przed/po.
 
-To jest symulacja, nie efekt pracy studia. Zanim strona pójdzie gdziekolwiek publicznie,
-trzeba podmienić na realną parę zdjęć. Oznaczone komentarzem w `before-after-slider.tsx`.
+Dlatego `caseStudy` ma **dwa osobne pola**: `beforeImage` i `afterImage`.
+
+- Kiedy wskazują **różne** pliki, slider pokazuje oba zdjęcia bez żadnej obróbki i oba
+  dostają prawdziwy `alt`.
+- Kiedy wskazują **ten sam** plik, i tylko wtedy, lewa połowa jest przygaszana filtrem CSS,
+  żeby dało się zademonstrować mechanikę.
+
+Fallback jest warunkowy celowo: podmiana na prawdziwą parę usuwa symulację automatycznie, a
+nie "kiedyś, gdy ktoś sobie przypomni". Pilnują tego dwa testy w
+`before-after-slider.test.tsx` — jeden sprawdza, że filtr jest w trybie fallbacku, drugi że
+**znika**, gdy ścieżki są różne.
+
+#### Jak wstawić prawdziwą parę
+
+1. Wrzuć dwa pliki do `public/images/`.
+2. Zmień `beforeImage` i `afterImage` w `src/data/case-study.ts`.
+3. Popraw `beforeAfter.imageAlt` i `beforeAfter.beforeAlt` w obu słownikach.
+
+Nic więcej — żadnej zmiany w komponencie.
+
+Najprostszy sposób zdobycia realnej pary: zakleić taśmą linię przez środek jednego panelu,
+wypolerować jedną połowę, zrobić dwa zdjęcia w tym samym świetle i kadrze. Detailerzy
+nazywają to kadrem 50/50 i robią to rutynowo.
 
 ## Dane
 

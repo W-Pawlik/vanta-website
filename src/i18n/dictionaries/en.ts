@@ -258,6 +258,7 @@ export const en: Dictionary = {
     after: 'After VANTA',
     sliderLabel: 'Before and after comparison — drag or use the arrow keys',
     sliderValue: 'of the “before” view',
+    beforeAlt: 'Paint before correction — visible dullness and light scratches',
     caseLabel: 'Project',
     scopeLabel: 'Scope of work',
     durationLabel: 'Turnaround',

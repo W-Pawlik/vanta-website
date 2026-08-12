@@ -258,6 +258,7 @@ export const pl = {
     after: 'Po VANTA',
     sliderLabel: 'Porównanie przed i po — przeciągnij lub użyj strzałek',
     sliderValue: 'widoku „przed”',
+    beforeAlt: 'Lakier przed korektą — widoczne zmatowienia i drobne zarysowania',
     caseLabel: 'Realizacja',
     scopeLabel: 'Zakres prac',
     durationLabel: 'Czas realizacji',

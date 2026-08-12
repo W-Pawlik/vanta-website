@@ -4,17 +4,32 @@ import { describe, expect, it } from 'vitest'
 
 import { BeforeAfterSlider } from './before-after-slider'
 
+const LABELS = {
+  imageAlt: 'Makro wypolerowanego czarnego lakieru',
+  beforeAlt: 'Lakier przed korektą',
+  before: 'Przed',
+  after: 'Po VANTA',
+  slider: 'Porównanie przed i po',
+  sliderValue: 'widoku „przed”',
+}
+
+/** Default: no real pair yet, so both sides point at the same file. */
 const setup = () =>
   render(
     <BeforeAfterSlider
-      image="/images/before-after-paint.jpg"
-      labels={{
-        imageAlt: 'Makro wypolerowanego czarnego lakieru',
-        before: 'Przed',
-        after: 'Po VANTA',
-        slider: 'Porównanie przed i po',
-        sliderValue: 'widoku „przed”',
-      }}
+      beforeImage="/images/before-after-paint.jpg"
+      afterImage="/images/before-after-paint.jpg"
+      labels={LABELS}
+    />,
+  )
+
+/** With two genuinely different photographs. */
+const setupWithPair = () =>
+  render(
+    <BeforeAfterSlider
+      beforeImage="/images/before.jpg"
+      afterImage="/images/after.jpg"
+      labels={LABELS}
     />,
   )
 
@@ -78,14 +93,38 @@ describe('BeforeAfterSlider', () => {
     expect(slider).toHaveAttribute('aria-valuenow', '100')
   })
 
-  it('renders the dulled "before" copy as decorative, not as a second photo', () => {
+  it('treats the duplicated "before" as decorative while there is no real pair', () => {
     setup()
 
-    // Exactly one announced photograph. The dulled duplicate exists only to be
-    // filtered, so it carries an empty alt — which is why it surfaces as
-    // `presentation` rather than as a second image.
-    expect(screen.getByAltText('Makro wypolerowanego czarnego lakieru')).toBeInTheDocument()
+    // Exactly one announced photograph. The duplicate exists only to be filtered, so it
+    // carries an empty alt — the same frame announced twice is noise.
+    expect(screen.getByAltText(LABELS.imageAlt)).toBeInTheDocument()
     expect(screen.getAllByRole('img')).toHaveLength(1)
     expect(screen.getAllByRole('presentation', { hidden: true })).toHaveLength(1)
+  })
+
+  it('announces both photographs once a real pair is supplied', () => {
+    setupWithPair()
+
+    expect(screen.getByAltText(LABELS.imageAlt)).toBeInTheDocument()
+    expect(screen.getByAltText(LABELS.beforeAlt)).toBeInTheDocument()
+    expect(screen.getAllByRole('img')).toHaveLength(2)
+  })
+
+  it('drops the simulated degradation as soon as the images differ', () => {
+    // The guard that matters: the CSS fake must not survive a real pair being dropped in.
+    setupWithPair()
+
+    const before = screen.getByAltText(LABELS.beforeAlt)
+
+    expect(before.className).not.toMatch(/saturate-|brightness-|blur-/)
+  })
+
+  it('degrades the left half only in the fallback case', () => {
+    setup()
+
+    const [decorative] = screen.getAllByRole('presentation', { hidden: true })
+
+    expect(decorative?.className).toMatch(/saturate-/)
   })
 })

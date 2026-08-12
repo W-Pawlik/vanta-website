@@ -29,9 +29,11 @@ export async function BeforeAfter() {
 
         <div className="mt-20">
           <BeforeAfterSlider
-            image={caseStudy.image}
+            beforeImage={caseStudy.beforeImage}
+            afterImage={caseStudy.afterImage}
             labels={{
               imageAlt: copy.imageAlt,
+              beforeAlt: copy.beforeAlt,
               before: copy.before,
               after: copy.after,
               slider: copy.sliderLabel,

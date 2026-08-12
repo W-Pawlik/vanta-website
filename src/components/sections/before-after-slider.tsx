@@ -8,9 +8,11 @@ import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils/cn'
 
 type BeforeAfterSliderProps = {
-  image: string
+  beforeImage: string
+  afterImage: string
   labels: {
     imageAlt: string
+    beforeAlt: string
     before: string
     after: string
     slider: string
@@ -34,15 +36,20 @@ const HINT_RETURN_MS = 1240
  * clarity, and flat versus sharp reflections. That is what a detailing customer
  * is actually looking for.
  *
- * ⚠️ STILL PLACEHOLDER IMAGERY. Both halves are the same frame; the "before" side
- * is degraded in CSS (haze, lost contrast, softened highlights). It demonstrates
- * the mechanic honestly but it is not a real result — swap in a genuine pair
- * before this page goes anywhere public. See .agents/specs/00-implementation-plan.md.
+ * Two independent images. When  and  differ, both are shown as
+ * they are and both get real alt text — a genuine comparison.
+ *
+ * When they are the **same file** there is no real pair, and only then does the left half
+ * get degraded in CSS (haze, lost contrast, softened highlights) so the mechanic can be
+ * demonstrated. The fallback is conditional by design: dropping in two real photographs
+ * removes the simulation automatically, rather than leaving it to be noticed later.
+ * See .agents/specs/00-implementation-plan.md.
  *
  * Accessibility: the handle is a real slider (role, value, arrow keys), so the
  * comparison is reachable without a pointer.
  */
-export function BeforeAfterSlider({ image, labels }: BeforeAfterSliderProps) {
+export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAfterSliderProps) {
+  const isSimulated = beforeImage === afterImage
   const frameRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
@@ -146,7 +153,7 @@ export function BeforeAfterSlider({ image, labels }: BeforeAfterSliderProps) {
     >
       {/* AFTER — the untouched frame, revealed to the right of the separator. */}
       <Image
-        src={image}
+        src={afterImage}
         alt={labels.imageAlt}
         fill
         priority={false}
@@ -154,25 +161,33 @@ export function BeforeAfterSlider({ image, labels }: BeforeAfterSliderProps) {
         className="object-cover"
       />
 
-      {/* BEFORE — same frame, degraded the way neglected paint actually looks:
-          hazy, low in contrast, with the highlights gone soft. */}
+      {/* BEFORE — a real photograph when one exists. Otherwise the same frame, degraded
+          the way neglected paint actually looks: hazy, low in contrast, highlights soft. */}
       <div
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
         <Image
-          src={image}
-          alt=""
-          aria-hidden="true"
+          src={beforeImage}
+          // A real "before" photograph is content and gets described. The duplicate used
+          // by the simulation is decorative — the same frame announced twice is noise.
+          alt={isSimulated ? '' : labels.beforeAlt}
+          aria-hidden={isSimulated ? 'true' : undefined}
           fill
           sizes="(max-width: 1024px) 100vw, 1280px"
-          className="object-cover blur-[1.1px] brightness-[0.86] contrast-[0.68] saturate-[0.4]"
+          className={cn(
+            'object-cover',
+            isSimulated && 'blur-[1.1px] brightness-[0.86] contrast-[0.68] saturate-[0.4]',
+          )}
         />
-        {/* Micro-haze, the optical signature of swirl marks under a hard light. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(80%_60%_at_45%_40%,rgba(255,255,255,0.11),transparent_70%)]"
-        />
+        {/* Micro-haze, the optical signature of swirl marks under a hard light. Part of
+            the simulation only — a real "before" photo already looks like this. */}
+        {isSimulated && (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(80%_60%_at_45%_40%,rgba(255,255,255,0.11),transparent_70%)]"
+          />
+        )}
       </div>
 
       <Badge className="top-5 left-5 text-content">{labels.before}</Badge>
