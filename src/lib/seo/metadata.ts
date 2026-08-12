@@ -48,9 +48,15 @@ export function buildMetadata({
     description: resolvedDescription,
     alternates: {
       canonical: localePath,
-      languages: Object.fromEntries(
-        locales.map((entry) => [entry, path === '/' ? `/${entry}` : `/${entry}${path}`]),
-      ),
+      languages: {
+        ...Object.fromEntries(
+          locales.map((entry) => [entry, path === '/' ? `/${entry}` : `/${entry}${path}`]),
+        ),
+        // The unprefixed path negotiates the locale from Accept-Language in the proxy,
+        // which is exactly what x-default describes: the URL aimed at no single
+        // language. Without it there is no signal for visitors outside pl/en.
+        'x-default': path,
+      },
     },
     openGraph: {
       type: 'website',
