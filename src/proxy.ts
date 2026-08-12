@@ -40,7 +40,12 @@ export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone()
   url.pathname = pathname === '/' ? `/${pickLocale(request)}` : `/${pickLocale(request)}${pathname}`
 
-  return NextResponse.redirect(url)
+  const response = NextResponse.redirect(url)
+  // The target depends on Accept-Language, so any shared cache has to key on it.
+  // Without this a cached `/` → `/pl` is served to an English visitor and vice versa.
+  response.headers.set('Vary', 'Accept-Language')
+
+  return response
 }
 
 export const config = {
