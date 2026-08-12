@@ -55,3 +55,4 @@ Co odrzucono i dlaczego.
 | [0004](0004-drop-lenis.md)                    | Rezygnacja z Lenis, native scroll                         | Accepted |
 | [0005](0005-i18n-routing-and-dictionaries.md) | Dwujęzyczność: routing per locale i słowniki              | Accepted |
 | [0006](0006-sharp-for-asset-preparation.md)   | sharp do przygotowania zdjec                              | Accepted |
+| [0007](0007-lazy-gsap.md)                     | GSAP ładowany leniwie, bez `@gsap/react`                  | Accepted |

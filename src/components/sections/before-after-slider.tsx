@@ -152,7 +152,6 @@ export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAft
         src={afterImage}
         alt={labels.imageAlt}
         fill
-        priority={false}
         sizes="(max-width: 1024px) 100vw, 1280px"
         {...blurProps(afterImage)}
         className="object-cover"

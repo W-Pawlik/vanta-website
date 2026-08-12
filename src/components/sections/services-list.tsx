@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'motion/react'
-import { useState, type PointerEvent } from 'react'
+import { useRef, useState, type PointerEvent } from 'react'
 
 import { useLeadSelection } from '@/components/lead/lead-selection'
 import { useHasFinePointer } from '@/hooks/use-media-query'
@@ -46,10 +46,19 @@ const PREVIEW_WIDTH = 320
 const PREVIEW_HEIGHT = 220
 
 /**
- * How far the cursor may move the preview. Deliberately small: gluing the image to
- * the pointer looks cheap, a damped ±24px drift looks considered.
+ * Distance between the pointer and the preview's leading edge. Large enough that the
+ * cursor never sits on top of the photograph it is revealing.
  */
-const DRIFT = 24
+const CURSOR_GAP = 28
+
+/** Inset used when the preview is anchored to a row by keyboard focus instead of a pointer. */
+const FOCUS_INSET = 24
+
+/**
+ * The preview follows the pointer through a spring rather than tracking it exactly.
+ * Gluing the image to the cursor looks cheap; a damped trail looks considered
+ * (.agents/05-animation-system.md).
+ */
 const SPRING = { stiffness: 140, damping: 20, mass: 0.5 } as const
 
 /**
@@ -81,17 +90,62 @@ export function ServicesList({
   const reduceMotion = useReducedMotion()
   const previewEnabled = hasFinePointer && !reduceMotion
 
-  const driftX = useMotionValue(0)
-  const driftY = useMotionValue(0)
-  const x = useSpring(driftX, SPRING)
-  const y = useSpring(driftY, SPRING)
+  const listRef = useRef<HTMLUListElement>(null)
+  const pointerX = useMotionValue(0)
+  const pointerY = useMotionValue(0)
+  const x = useSpring(pointerX, SPRING)
+  const y = useSpring(pointerY, SPRING)
 
   const onPointerMove = (event: PointerEvent<HTMLUListElement>) => {
     if (!previewEnabled) return
 
     const bounds = event.currentTarget.getBoundingClientRect()
-    driftX.set(((event.clientX - bounds.left) / bounds.width - 0.5) * DRIFT * 2)
-    driftY.set(((event.clientY - bounds.top) / bounds.height - 0.5) * DRIFT * 2)
+    const position = clampToList(
+      event.clientX - bounds.left + CURSOR_GAP,
+      event.clientY - bounds.top - PREVIEW_HEIGHT / 2,
+      bounds,
+    )
+
+    pointerX.set(position.x)
+    pointerY.set(position.y)
+  }
+
+  /**
+   * Re-entering the list would otherwise animate the preview across the section from
+   * wherever the pointer left it. `jump` places it under the cursor without a transition;
+   * every move after that is sprung.
+   */
+  const onPointerEnter = (event: PointerEvent<HTMLUListElement>) => {
+    if (!previewEnabled) return
+
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const position = clampToList(
+      event.clientX - bounds.left + CURSOR_GAP,
+      event.clientY - bounds.top - PREVIEW_HEIGHT / 2,
+      bounds,
+    )
+
+    x.jump(position.x)
+    y.jump(position.y)
+  }
+
+  /**
+   * Keyboard focus has no pointer to follow, so the preview is anchored to the focused
+   * row instead — otherwise it would appear at whatever position the mouse last visited.
+   */
+  const anchorToRow = (row: HTMLElement) => {
+    const bounds = listRef.current?.getBoundingClientRect()
+    if (!previewEnabled || !bounds) return
+
+    const rowBounds = row.getBoundingClientRect()
+    const position = clampToList(
+      bounds.width - PREVIEW_WIDTH - FOCUS_INSET,
+      rowBounds.top - bounds.top + rowBounds.height / 2 - PREVIEW_HEIGHT / 2,
+      bounds,
+    )
+
+    x.jump(position.x)
+    y.jump(position.y)
   }
 
   // Focus returns to the trigger on close — handled by Overlay, which captures the
@@ -130,7 +184,9 @@ export function ServicesList({
       </div>
 
       <ul
+        ref={listRef}
         className="mt-8 border-t border-line"
+        onPointerEnter={onPointerEnter}
         onPointerMove={onPointerMove}
         onPointerLeave={() => setActiveIndex(null)}
       >
@@ -140,7 +196,10 @@ export function ServicesList({
               type="button"
               onClick={() => open({ kind: 'service', service: item })}
               onPointerEnter={() => setActiveIndex(index)}
-              onFocus={() => setActiveIndex(index)}
+              onFocus={(event) => {
+                setActiveIndex(index)
+                anchorToRow(event.currentTarget)
+              }}
               onBlur={() => setActiveIndex(null)}
               aria-label={`${item.name} — ${labels.openDetails}`}
               className="group grid w-full cursor-pointer grid-cols-12 items-center gap-x-6 gap-y-5 py-8 text-left transition-colors duration-[var(--duration-base)] ease-out-quart hover:bg-content/[0.015] lg:min-h-[8.75rem] lg:py-6"
@@ -199,7 +258,7 @@ export function ServicesList({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: DURATION.base, ease: EASE.outQuart }}
-              className="pointer-events-none absolute top-1/2 right-6 -translate-y-1/2 overflow-hidden rounded-image"
+              className="pointer-events-none absolute top-0 left-0 overflow-hidden rounded-image"
             >
               <Image src={active.image} alt="" fill sizes="320px" className="object-cover" />
             </motion.div>
@@ -216,4 +275,20 @@ export function ServicesList({
       />
     </div>
   )
+}
+
+/**
+ * Keeps the preview inside the list box. Without the clamp it would hang over the section
+ * edges near the first row, the last row and the right gutter — the photograph has to read
+ * as part of the composition, not as an element escaping it.
+ */
+function clampToList(x: number, y: number, bounds: DOMRect) {
+  return {
+    x: clamp(x, 0, Math.max(bounds.width - PREVIEW_WIDTH, 0)),
+    y: clamp(y, 0, Math.max(bounds.height - PREVIEW_HEIGHT, 0)),
+  }
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
 }

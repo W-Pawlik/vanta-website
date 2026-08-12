@@ -74,6 +74,11 @@ text-numeric             110 px         liczby w Stats
 text-quote                56 px         cytat z opinii
 ```
 
+`text-display-hero` jest jedynym stopniem ograniczonym również **wysokością okna**
+(`min(7.2vw, 11.5svh)`). Powód: nagłówek hero ma trzy linie i na laptopie sama szerokość
+wypychała pasek meta („SCROLL TO EXPLORE", ocena, liczba realizacji) pod krawędź ekranu.
+Na desktopie wiąże nadal człon szerokościowy, więc 104 px @1440 zostaje bez zmian.
+
 Kluczowa zasada: **nagłówek sekcji jest mniejszy od stwierdzenia, a stwierdzenie od hero.**
 Kiedy każdy duży napis ma ten sam rozmiar, żaden nie ma siły.
 

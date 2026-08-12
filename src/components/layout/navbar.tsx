@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { LanguageSwitcher } from '@/components/layout/language-switcher'
@@ -30,8 +31,23 @@ const SCROLL_THRESHOLD = 80
 export function Navbar({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const home = `/${locale}`
 
   useLockBodyScroll(isMenuOpen)
+
+  /**
+   * On the home page the logo links to the page it is already on, so the router treats
+   * the click as a no-op and nothing moves. Scrolling has to be explicit.
+   *
+   * `scrollTo` without an explicit `behavior` inherits `scroll-behavior` from the
+   * document, which `base.css` already switches to `auto` under `prefers-reduced-motion`
+   * — so this stays smooth for everyone else without a second reduced-motion branch.
+   */
+  const backToTop = () => {
+    if (pathname !== home) return
+    window.scrollTo({ top: 0 })
+  }
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD)
@@ -69,7 +85,8 @@ export function Navbar({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         )}
       >
         <Link
-          href={`/${locale}`}
+          href={home}
+          onClick={backToTop}
           aria-label={dict.common.home}
           className="shrink-0 text-content transition-colors duration-[var(--duration-fast)] hover:text-accent"
         >

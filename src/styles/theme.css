@@ -62,7 +62,14 @@
    * Desktop targets (1440): hero 104 · statement 88 · section 70 · project 34 ·
    * card 30. Tracking tightens as size grows, so big type reads as one block.
    * ------------------------------------------------------------------------- */
-  --text-display-hero: clamp(2.75rem, 7.2vw, 7.25rem);
+  /* Capped against viewport *height* as well as width. The hero headline is three
+     lines, so on a laptop (≈730 px of viewport) the width term alone pushed the CTA row
+     and the meta strip below the fold — "SCROLL TO EXPLORE" announcing a scroll you
+     already had to perform to read it. At 11.5svh the three lines occupy ~30svh and the
+     whole opening composition resolves on one screen. The height term only wins below
+     roughly 950 px of viewport height; on a desktop the width term is still the binding
+     one, so the 104 px @1440 target is unchanged. */
+  --text-display-hero: clamp(2.75rem, min(7.2vw, 11.5svh), 7.25rem);
   --text-display-hero--line-height: 0.88;
   --text-display-hero--letter-spacing: -0.055em;
   --text-display-hero--font-weight: 600;

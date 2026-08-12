@@ -24,9 +24,16 @@ text reveal zależny od pozycji scrolla, nietypowy parallax.
 
 Reguły:
 
-- `gsap` i `ScrollTrigger` importujemy z `@/lib/motion/gsap`, nie z paczki. Tam jest jednorazowa rejestracja pluginów.
-- W komponentach używamy `useGSAP()` z `@gsap/react` — daje automatyczny cleanup i kontekst.
-- Każdy `ScrollTrigger` musi być zabity przy unmount (`useGSAP` robi to sam).
+- **GSAP ładujemy leniwie**, przez `loadGsap()` z `@/lib/motion/gsap` — nigdy importem z paczki
+  w module scope. Import statyczny wciąga 43 KB gzip na ścieżkę krytyczną każdej wizyty
+  ([ADR-0007](decisions/0007-lazy-gsap.md)). Rejestracja pluginów dzieje się tam raz.
+- **Nie używamy `useGSAP()`** i nie mamy zależności `@gsap/react` — ten hook importuje GSAP
+  statycznie, więc omijałby leniwe ładowanie.
+- Cleanup przez `gsap.context()` w `useEffect`: `context.revert()` w funkcji czyszczącej.
+  Każdy `ScrollTrigger` musi zostać zabity przy unmount.
+- Efekt musi obsłużyć unmount w trakcie pobierania biblioteki — wzorzec z flagą `cancelled`
+  jest w `scroll-lit-text.tsx`.
+- Przy `prefers-reduced-motion` nie wołamy `loadGsap()` wcale. Nie ma animacji, nie ma pobierania.
 
 ### Scroll — natywny, bez biblioteki
 
@@ -54,8 +61,9 @@ W `src/components/motion/`. Sekcja **komponuje** te elementy, nie pisze własnyc
 | `ScrollLitText`              | Tekst rozjaśniany słowo po słowie scrollem (GSAP). Używa go Manifesto.                               |
 
 Efekty żyjące w konkretnej sekcji, nie w bibliotece primitives:
-`ServicesList` (floating preview przy kursorze), `WorkGallery` (parallax per zdjęcie + cursor `VIEW`),
-`ProcessTimeline` (wypełniająca się linia), `BeforeAfterSlider` (drag + jednorazowa podpowiedź).
+`ServicesList` (floating preview idący za kursorem), `WorkGallery` (parallax per zdjęcie + cursor `VIEW`),
+`ProcessTimeline` (wypełniająca się linia), `BeforeAfterSlider` (drag + jednorazowa podpowiedź),
+`TestimonialsSlider` (track przesuwany indeksem + drag wskaźnikiem).
 
 ## Tokeny czasu i easingu
 
@@ -84,7 +92,10 @@ Motion jest zasobem, który się wydaje, nie warstwą nakładaną na wszystko.
 - Zoom obrazu na hover: `1 → 1.03`. Nigdy `1 → 1.2` — to najbardziej rozpoznawalny „portfolio dev" efekt.
 - Parallax: 20–60 px i **różny dla różnych zdjęć**. Identyczny zakres wszędzie czyta się jak efekt globalny.
 - Przycisk nigdy nie skaluje się na hover: zmienia kolor, a strzałka przesuwa się o 4 px.
-- Floating preview nie jest przyklejony do kursora. Dryfuje ±24 px ze sprężyną.
+- Floating preview idzie **za kursorem**, ale nie jest do niego przyklejony: pozycja przechodzi przez
+  sprężynę, więc obraz nadąża z opóźnieniem, a nie klei się do wskaźnika. Zawsze przycięty do
+  obszaru listy — nie wychodzi za krawędź sekcji. Przy focusie z klawiatury kotwiczy się do
+  wiersza, bo nie ma wtedy kursora, za którym mógłby iść.
 
 ### Timing
 
@@ -162,6 +173,7 @@ Przykład: floating image w usługach jest na desktopie efektem hover, na mobile
 | Parallax         | 20–50 px. Efekt ma być prawie podświadomy                                                                                                       |
 | Liczby           | count-up raz przy wejściu w viewport                                                                                                            |
 | Pakiety          | karty `y: 40 → 0`, `opacity: 0 → 1`, stagger 0,08–0,12 s; hover to minimalne przesunięcie treści, bez efektów 3D                                |
+| Opinie           | wszystkie trzy cytaty w jednym flex-tracku; zmiana slajdu przesuwa track o 100 %; drag wskaźnikiem (mysz i palec), próg 60 px albo flick        |
 | Formularz        | krok wychodzący `x: 0 → -30`, `opacity → 0`; wchodzący `x: 30 → 0`; 300–450 ms; `AnimatePresence`; progress bar płynnie zmienia szerokość       |
 | Success state    | karta formularza transformuje się w ✓ + komunikat. Nie „Formularz został wysłany”                                                               |
 | Menu mobilne     | pełnoekranowe, pozycje ze staggerem                                                                                                             |

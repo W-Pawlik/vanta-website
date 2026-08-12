@@ -53,7 +53,11 @@ const TEXT_STEPS = [
 ] as const
 
 const DISPLAY_SCALE = [
-  { token: 'text-display-hero', sample: 'Twój samochód', note: 'Hero — 104 px @1440' },
+  {
+    token: 'text-display-hero',
+    sample: 'Twój samochód',
+    note: 'Hero — 104 px @1440, ograniczony też wysokością okna (11.5svh)',
+  },
   { token: 'text-display-statement', sample: 'Nie maskujemy', note: 'Manifesto — 88 px' },
   {
     token: 'text-display-section',
