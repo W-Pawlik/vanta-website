@@ -19,6 +19,12 @@ type LanguageSwitcherProps = {
  *
  * Rendered as real links so the switch is a normal navigation: crawlable, works
  * without JavaScript, and keeps the current path across locales.
+ *
+ * `scroll={false}` is what keeps the reader where they were. The router's default is to
+ * maintain scroll position only while the Page element is still visible in the viewport,
+ * and to jump to the top of it otherwise — so switching language halfway down a
+ * one-page site threw the reader back to the hero. Changing the language must change
+ * the words and nothing else.
  */
 export function LanguageSwitcher({ current, label, className }: LanguageSwitcherProps) {
   const pathname = usePathname()
@@ -39,6 +45,7 @@ export function LanguageSwitcher({ current, label, className }: LanguageSwitcher
           <Link
             href={withLocale(pathname, locale)}
             hrefLang={locale}
+            scroll={false}
             aria-current={locale === current ? 'true' : undefined}
             className={cn(
               'transition-colors duration-[var(--duration-fast)]',
