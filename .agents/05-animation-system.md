@@ -177,3 +177,18 @@ Przykład: floating image w usługach jest na desktopie efektem hover, na mobile
 | Formularz        | krok wychodzący `x: 0 → -30`, `opacity → 0`; wchodzący `x: 30 → 0`; 300–450 ms; `AnimatePresence`; progress bar płynnie zmienia szerokość       |
 | Success state    | karta formularza transformuje się w ✓ + komunikat. Nie „Formularz został wysłany”                                                               |
 | Menu mobilne     | pełnoekranowe, pozycje ze staggerem                                                                                                             |
+
+## Gesty a scroll strony
+
+Każda powierzchnia przeciągana poziomo dzieli palec ze scrollem strony. Obowiązują dwie zasady:
+
+1. **`touch-pan-y`, nigdy `touch-none`.** `touch-action: none` oddaje elementowi wszystkie gesty, więc palec, który
+   wyląduje na zdjęciu, nie przewinie już strony. Przy elemencie szerokim na całą kolumnę oznacza to, że strony nie da
+   się przescrollować dalej — tak zachowywał się `BeforeAfterSlider`. `pan-y` zostawia pionowy pan przeglądarce,
+   a gesty poziome i tak docierają do handlera.
+2. **`preventDefault()` tylko dla wskaźnika, który nie jest palcem.** Wywołane na `pointermove` przy
+   `pointerType === 'touch'` odbiera przeglądarce scroll, który właśnie oddaliśmy przez `pan-y`.
+
+Z tego samego powodu dotknięcie nie jest jeszcze przeciągnięciem: `BeforeAfterSlider` ustawia separator natychmiast
+tylko pod myszą, a przy palcu czeka, aż gest okaże się poziomy — inaczej próba przewinięcia strony przeskakuje
+porównanie.

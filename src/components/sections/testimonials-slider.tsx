@@ -58,7 +58,13 @@ export function TestimonialsSlider({
 
   return (
     <div>
-      <div className="overflow-hidden" aria-live="polite">
+      {/* `overflow-clip`, not `overflow-hidden`. Both clip identically, but `hidden` also
+          makes this a scroll container — a 1005px-wide track inside a 335px box, holding
+          670px of horizontal slack that the browser is entitled to scroll to. Anything that
+          brings an off-screen quote into view (a focus call, an anchor jump) would scroll it
+          sideways and leave it there, with no scrollbar to show what happened. `clip` gives
+          the same picture and no scrollable area at all. */}
+      <div className="overflow-clip" aria-live="polite">
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}

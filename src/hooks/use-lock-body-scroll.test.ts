@@ -14,6 +14,8 @@ function simulateScrollbar(width: number) {
 
 afterEach(() => {
   document.body.style.overflow = ''
+  document.body.style.overflowX = ''
+  document.body.style.overflowY = ''
   document.body.style.paddingRight = ''
 })
 
@@ -21,13 +23,26 @@ describe('useLockBodyScroll', () => {
   it('does nothing while unlocked', () => {
     renderHook(() => useLockBodyScroll(false))
 
-    expect(document.body.style.overflow).toBe('')
+    expect(document.body.style.overflowY).toBe('')
   })
 
   it('freezes scrolling when locked', () => {
     renderHook(() => useLockBodyScroll(true))
 
-    expect(document.body.style.overflow).toBe('hidden')
+    expect(document.body.style.overflowY).toBe('hidden')
+  })
+
+  /**
+   * Guards the horizontal overflow net in base.css. An inline `overflow: hidden` here
+   * would override the stylesheet's `overflow-x: clip`, so the page could be scrolled
+   * sideways for as long as an overlay was open — a mobile-only bug, because that is
+   * where the overlays are.
+   */
+  it('leaves the horizontal axis alone so the overflow-x clip survives', () => {
+    renderHook(() => useLockBodyScroll(true))
+
+    expect(document.body.style.overflowX).toBe('')
+    expect(document.body.style.overflow).not.toBe('hidden')
   })
 
   it('compensates for the scrollbar width so the layout does not shift', () => {
@@ -48,12 +63,12 @@ describe('useLockBodyScroll', () => {
 
   it('restores the previous inline styles on unmount', () => {
     simulateScrollbar(15)
-    document.body.style.overflow = 'auto'
+    document.body.style.overflowY = 'auto'
 
     const { unmount } = renderHook(() => useLockBodyScroll(true))
     unmount()
 
-    expect(document.body.style.overflow).toBe('auto')
+    expect(document.body.style.overflowY).toBe('auto')
     expect(document.body.style.paddingRight).toBe('')
   })
 
@@ -64,6 +79,6 @@ describe('useLockBodyScroll', () => {
 
     rerender({ locked: false })
 
-    expect(document.body.style.overflow).toBe('')
+    expect(document.body.style.overflowY).toBe('')
   })
 })

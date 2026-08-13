@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { BeforeAfterSlider } from './before-after-slider'
 
@@ -126,5 +126,60 @@ describe('BeforeAfterSlider', () => {
     const [decorative] = screen.getAllByRole('presentation', { hidden: true })
 
     expect(decorative?.className).toMatch(/saturate-/)
+  })
+
+  /**
+   * Regression guard for the touch path. The frame is a full-width band in the middle of
+   * the page; it used to declare `touch-action: none` and preventDefault() every move, so
+   * any finger that landed on the photograph was swallowed and the page could not be
+   * scrolled past this section on a phone.
+   */
+  describe('pointer handling', () => {
+    /**
+     * jsdom has no layout, so the frame needs a width before a press maps to a position.
+     * Stubbed on the prototype because the frame carries no role of its own — the press is
+     * dispatched on the handle and reaches the frame by bubbling, which is also how a real
+     * touch on the photograph arrives.
+     */
+    const giveTheFrameAWidth = () =>
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 400,
+        height: 300,
+        right: 400,
+        bottom: 300,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect)
+
+    it('positions the separator where a mouse presses', async () => {
+      setup()
+      giveTheFrameAWidth()
+      const slider = screen.getByRole('slider')
+
+      await userEvent.pointer({
+        target: slider,
+        keys: '[MouseLeft>]',
+        coords: { clientX: 300, clientY: 10 },
+      })
+
+      expect(slider).toHaveAttribute('aria-valuenow', '75')
+    })
+
+    it('ignores a touch until it moves, so a scroll gesture is not read as a drag', async () => {
+      setup()
+      giveTheFrameAWidth()
+      const slider = screen.getByRole('slider')
+
+      await userEvent.pointer({
+        target: slider,
+        keys: '[TouchA>]',
+        coords: { clientX: 300, clientY: 10 },
+      })
+
+      expect(slider).toHaveAttribute('aria-valuenow', '50')
+    })
   })
 })
