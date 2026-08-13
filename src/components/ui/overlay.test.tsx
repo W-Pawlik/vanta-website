@@ -117,10 +117,11 @@ describe('Overlay', () => {
     render(<Harness />)
 
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
-    expect(document.body.style.overflow).toBe('hidden')
+    // Vertical only — the horizontal axis stays with base.css, see useLockBodyScroll.
+    expect(document.body.style.overflowY).toBe('hidden')
 
     await userEvent.keyboard('{Escape}')
-    expect(document.body.style.overflow).toBe('')
+    expect(document.body.style.overflowY).toBe('')
   })
 
   it('returns focus to whatever opened it', async () => {

@@ -31,6 +31,11 @@
     background-color: var(--color-canvas);
     color-scheme: dark;
     -webkit-tap-highlight-color: transparent;
+    /* Declared here as well as on `body`, and that is deliberate. The rule that lets a
+     * `body` value reach the viewport only applies while the root element's own overflow
+     * is `visible`, so the net below is one stylesheet edit — or one inline style — away
+     * from being switched off. Mobile engines are the ones that punish that. */
+    overflow-x: clip;
   }
 
   body {
