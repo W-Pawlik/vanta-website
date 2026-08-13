@@ -203,7 +203,18 @@ Zdjęcia mogą wychodzić do krawędzi viewportu. Dwie drogi:
 1. Element **poza** `Container` — najprostsze i preferowane.
 2. Utility `bleed` — gdy element musi zostać w drzewie kontenera.
 
-`body` ma `overflow-x: clip`. Poziomy scrollbar to **zawsze błąd** — przycinaj we własnym kontenerze, nie licz na dokument.
+`html` **i** `body` mają `overflow-x: clip`. Poziomy scrollbar to **zawsze błąd** — przycinaj we własnym kontenerze,
+nie licz na dokument. Deklaracja jest zdublowana celowo: wartość z `body` trafia do viewportu tylko dopóki `html` ma
+`overflow: visible`, więc jedna linia CSS albo jeden styl inline potrafi wyłączyć całą siatkę bezpieczeństwa.
+
+Dwie pułapki, które już raz to zepsuły:
+
+- **Blokada scrolla nie rusza osi poziomej.** `body.style.overflow = 'hidden'` to skrót, który podmienia też
+  `overflow-x` i na czas otwartego overlaya zdejmuje `clip`. Blokujemy `overflow-y` — patrz `useLockBodyScroll`.
+- **Kontener przycinający track używa `overflow-clip`, nie `overflow-hidden`.** `hidden` robi z niego kontener
+  przewijalny: track karuzeli o szerokości 300 % zostawia w nim setki pikseli poziomego luzu, do którego przeglądarka
+  ma prawo przewinąć (np. przy `focus()` na slajdzie poza ekranem) — bez scrollbara, który by to pokazał.
+  `clip` daje ten sam obraz i zero obszaru przewijania.
 
 ## Strona `/system`
 
