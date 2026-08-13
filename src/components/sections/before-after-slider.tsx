@@ -83,7 +83,11 @@ export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAft
     if (!isDragging) return
 
     const onMove = (event: PointerEvent) => {
-      event.preventDefault()
+      // `touch-pan-y` on the frame hands vertical panning back to the browser; calling
+      // preventDefault() on a touch move would take it straight back and freeze the page
+      // under the finger. A mouse has no such contract, and suppressing its default is
+      // what stops a drag from turning into a selection.
+      if (event.pointerType !== 'touch') event.preventDefault()
       setFromClientX(event.clientX)
     }
     const onUp = () => setIsDragging(false)
@@ -140,10 +144,17 @@ export function BeforeAfterSlider({ beforeImage, afterImage, labels }: BeforeAft
       onPointerDown={(event) => {
         setHasInteracted(true)
         setIsDragging(true)
-        setFromClientX(event.clientX)
+        // A finger landing here is just as likely to be the start of a page scroll as a
+        // drag, so the separator waits for the gesture to prove itself horizontal instead
+        // of jumping to the touch. A mouse press is unambiguous and positions it at once.
+        if (event.pointerType !== 'touch') setFromClientX(event.clientX)
       }}
       className={cn(
-        'relative aspect-4/3 w-full touch-none overflow-hidden rounded-image select-none sm:aspect-16/9 lg:aspect-[16/8.5]',
+        // `touch-pan-y`, not `touch-none`: the frame is a full-width band in the middle of
+        // the page, and `none` meant every touch that started on the photograph was
+        // swallowed — the page could not be scrolled past this section on a phone.
+        // Horizontal gestures still reach the drag handler, vertical ones scroll the page.
+        'relative aspect-4/3 w-full touch-pan-y overflow-hidden rounded-image select-none sm:aspect-16/9 lg:aspect-[16/8.5]',
         isDragging ? 'cursor-grabbing' : 'cursor-grab',
       )}
     >
